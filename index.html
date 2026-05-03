@@ -1,1002 +1,1187 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UC Berkeley EECS — UX Redesign Case Study</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f5f2eb;
-    --bg-dark: #1a1a18;
-    --ink: #1a1a18;
-    --ink-muted: #6b6b5e;
-    --accent: #1e3f8a;
-    --accent-warm: #c84b1e;
-    --rule: #d0ccc0;
-    --card-bg: #ffffff;
-    --tag-bg: #e8e4da;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC Berkeley EECS — UX Redesign Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f2eb;
+            --bg-dark: #1a1a18;
+            --ink: #1a1a18;
+            --ink-muted: #6b6b5e;
+            --accent: #1e3f8a;
+            --accent-warm: #c84b1e;
+            --rule: #d0ccc0;
+            --card-bg: #ffffff;
+            --tag-bg: #e8e4da;
+        }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    font-size: 16px;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
 
-  /* ── TOP BAR ── */
-  .topbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--rule);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 2rem;
-    height: 52px;
-  }
-  .topbar-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-  }
-  .topbar-nav {
-    display: flex; gap: 1.6rem;
-    list-style: none;
-  }
-  .topbar-nav a {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .topbar-nav a:hover { color: var(--accent); }
+        /* ── TOP BAR ── */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--bg);
+            border-bottom: 1px solid var(--rule);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 52px;
+        }
 
-  /* ── HERO ── */
-  .hero {
-    margin-top: 52px;
-    padding: 5rem 2rem 3.5rem;
-    max-width: 900px;
-    margin-left: auto; margin-right: auto;
-    border-bottom: 1px solid var(--rule);
-  }
-  .hero-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent-warm);
-    margin-bottom: 1.2rem;
-    display: flex; align-items: center; gap: 0.6rem;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 24px; height: 1px;
-    background: var(--accent-warm);
-  }
-  .hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2.4rem, 5vw, 4rem);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
-    max-width: 720px;
-  }
-  .hero h1 em {
-    font-style: italic;
-    color: var(--accent);
-  }
-  .hero-meta {
-    display: flex; flex-wrap: wrap; gap: 2rem;
-    margin-bottom: 2rem;
-  }
-  .hero-meta-item {
-    display: flex; flex-direction: column; gap: 0.2rem;
-  }
-  .meta-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-  }
-  .meta-value {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--ink);
-  }
-  .hero-intro {
-    font-size: 1.1rem;
-    color: var(--ink-muted);
-    max-width: 640px;
-    font-weight: 300;
-  }
+        .topbar-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
 
-  /* ── SECTIONS ── */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
+        .topbar-nav {
+            display: flex;
+            gap: 1.6rem;
+            list-style: none;
+        }
 
-  section {
-    padding: 4rem 0;
-    border-bottom: 1px solid var(--rule);
-  }
+        .topbar-nav a {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
 
-  .section-header {
-    display: flex; align-items: baseline; gap: 1rem;
-    margin-bottom: 2.5rem;
-  }
-  .section-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--ink-muted);
-    letter-spacing: 0.1em;
-    min-width: 2rem;
-  }
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.8rem;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
+        .topbar-nav a:hover {
+            color: var(--accent);
+        }
 
-  .prose {
-    color: var(--ink);
-    font-size: 0.97rem;
-    line-height: 1.75;
-    max-width: 660px;
-  }
-  .prose + .prose { margin-top: 1rem; }
-  .prose strong { font-weight: 500; }
+        /* ── HERO ── */
+        .hero {
+            margin-top: 52px;
+            padding: 5rem 2rem 3.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            border-bottom: 1px solid var(--rule);
+        }
 
-  /* ── HEURISTIC TAGS ── */
-  .tag-list {
-    display: flex; flex-wrap: wrap; gap: 0.5rem;
-    margin: 1.5rem 0;
-  }
-  .tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: var(--tag-bg);
-    color: var(--ink-muted);
-    padding: 0.3rem 0.7rem;
-    border-radius: 2px;
-  }
-  .tag.accent {
-    background: var(--accent);
-    color: #fff;
-  }
-  .tag.warm {
-    background: var(--accent-warm);
-    color: #fff;
-  }
+        .hero-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-warm);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
 
-  /* ── PROBLEM CARDS ── */
-  .problem-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-    margin: 2rem 0;
-  }
-  .problem-card {
-    background: var(--card-bg);
-    padding: 1.4rem 1.5rem;
-  }
-  .problem-card-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--accent-warm);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
-  }
-  .problem-card h4 {
-    font-size: 0.88rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    line-height: 1.4;
-  }
-  .problem-card p {
-    font-size: 0.82rem;
-    color: var(--ink-muted);
-    line-height: 1.6;
-  }
+        .hero-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 1px;
+            background: var(--accent-warm);
+        }
 
-  /* ── IMAGE SLOTS ── */
-  .img-row {
-    display: grid;
-    gap: 1rem;
-    margin: 2rem 0;
-  }
-  .img-row.two { grid-template-columns: 1fr 1fr; }
-  .img-row.one { grid-template-columns: 1fr; }
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            max-width: 720px;
+        }
 
-  .img-slot {
-    background: var(--tag-bg);
-    border: 1.5px dashed var(--rule);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 2.5rem 1rem;
-    min-height: 220px;
-    position: relative;
-    overflow: hidden;
-  }
-  .img-slot img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    position: absolute; inset: 0;
-  }
-  .img-slot-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    text-align: center;
-    position: relative; z-index: 1;
-    pointer-events: none;
-  }
-  .img-slot-icon {
-    width: 28px; height: 28px;
-    opacity: 0.3;
-  }
-  .img-caption {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--ink-muted);
-    letter-spacing: 0.06em;
-    margin-top: 0.5rem;
-  }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
 
-  /* ── GOALS LIST ── */
-  .goals-list {
-    list-style: none;
-    margin: 1.5rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border: 1px solid var(--rule);
-  }
-  .goals-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem 1.2rem;
-    border-bottom: 1px solid var(--rule);
-    font-size: 0.92rem;
-  }
-  .goals-list li:last-child { border-bottom: none; }
-  .goals-list li::before {
-    content: attr(data-n);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--accent);
-    min-width: 1.4rem;
-    padding-top: 0.12rem;
-    letter-spacing: 0.05em;
-  }
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
 
-  /* ── TESTING NOTES ── */
-  .tester-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
-    margin: 1.5rem 0;
-  }
-  .tester-card {
-    background: var(--card-bg);
-    padding: 1.2rem 1.3rem;
-  }
-  .tester-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1rem;
-    margin-bottom: 0.6rem;
-  }
-  .tester-findings {
-    font-size: 0.8rem;
-    color: var(--ink-muted);
-    line-height: 1.6;
-  }
+        .hero-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
 
-  /* ── REVISION TABLE ── */
-  .revision-list {
-    list-style: none;
-    margin: 1.5rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .revision-item {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1rem;
-    padding: 1rem 1.2rem;
-    background: var(--card-bg);
-    border-left: 3px solid var(--accent);
-  }
-  .revision-item.removed { border-left-color: var(--accent-warm); }
-  .revision-badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.5rem;
-    border-radius: 2px;
-    background: var(--accent);
-    color: #fff;
-    white-space: nowrap;
-    height: fit-content;
-  }
-  .revision-badge.removed { background: var(--accent-warm); }
-  .revision-text {
-    font-size: 0.88rem;
-    line-height: 1.6;
-  }
-  .revision-text strong { font-weight: 500; }
+        .meta-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
 
-  /* ── PROTOTYPE FLOWS ── */
-  .flow-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin: 1.5rem 0;
-  }
-  .flow-card {
-    padding: 1.2rem 1.3rem;
-    background: var(--card-bg);
-    border: 1px solid var(--rule);
-  }
-  .flow-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.6rem;
-  }
-  .flow-steps {
-    font-size: 0.82rem;
-    color: var(--ink-muted);
-    line-height: 1.7;
-  }
-  .flow-arrow { color: var(--accent-warm); }
+        .meta-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--ink);
+        }
 
-  /* ── OUTCOMES TABLE ── */
-  .outcomes-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    font-size: 0.86rem;
-  }
-  .outcomes-table th {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    padding: 0.6rem 1rem;
-    text-align: left;
-    border-bottom: 2px solid var(--ink);
-  }
-  .outcomes-table td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--rule);
-    vertical-align: top;
-  }
-  .outcomes-table tr:last-child td { border-bottom: none; }
-  .status-dot {
-    display: inline-block;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    margin-right: 0.4rem;
-    vertical-align: middle;
-  }
-  .dot-resolved { background: #2e7d45; }
-  .dot-partial { background: #b58400; }
+        .hero-intro {
+            font-size: 1.1rem;
+            color: var(--ink-muted);
+            max-width: 640px;
+            font-weight: 300;
+        }
 
-  /* ── FINAL PROTOTYPE SECTION ── */
-  .prototype-link-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.3rem 1.5rem;
-    background: var(--accent);
-    color: #fff;
-    text-decoration: none;
-    margin: 1.5rem 0;
-    transition: background 0.2s;
-  }
-  .prototype-link-box:hover { background: #162f6a; }
-  .prototype-link-box span {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .prototype-link-arrow {
-    font-size: 1.2rem;
-  }
+        /* ── SECTIONS ── */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
 
-  /* ── REFLECTIONS ── */
-  .quote-block {
-    border-left: 3px solid var(--accent-warm);
-    padding: 1rem 1.5rem;
-    margin: 1.5rem 0;
-    background: var(--card-bg);
-  }
-  .quote-block p {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.05rem;
-    font-style: italic;
-    line-height: 1.6;
-    color: var(--ink);
-  }
-  .quote-source {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--ink-muted);
-    margin-top: 0.6rem;
-    letter-spacing: 0.08em;
-  }
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--rule);
+        }
 
-  /* ── FOOTER ── */
-  footer {
-    padding: 3rem 2rem;
-    text-align: center;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-  }
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
 
-  /* ── SCROLL PROGRESS ── */
-  #progress-bar {
-    position: fixed;
-    top: 52px; left: 0;
-    height: 2px;
-    background: var(--accent-warm);
-    width: 0%;
-    z-index: 99;
-    transition: width 0.1s linear;
-  }
+        .section-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--ink-muted);
+            letter-spacing: 0.1em;
+            min-width: 2rem;
+        }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 640px) {
-    .img-row.two { grid-template-columns: 1fr; }
-    .topbar-nav { display: none; }
-    .hero { padding: 3rem 1.5rem 2.5rem; }
-    .hero h1 { font-size: 2rem; }
-    .container { padding: 0 1.5rem; }
-    .outcomes-table { display: block; overflow-x: auto; }
-    .prototype-link-box { flex-direction: column; gap: 0.5rem; }
-  }
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
 
-  /* ── FADE IN ON SCROLL ── */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-</style>
+        .prose {
+            color: var(--ink);
+            font-size: 0.97rem;
+            line-height: 1.75;
+            max-width: 660px;
+        }
+
+        .prose+.prose {
+            margin-top: 1rem;
+        }
+
+        .prose strong {
+            font-weight: 500;
+        }
+
+        /* ── HEURISTIC TAGS ── */
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .tag {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: var(--tag-bg);
+            color: var(--ink-muted);
+            padding: 0.3rem 0.7rem;
+            border-radius: 2px;
+        }
+
+        .tag.accent {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .tag.warm {
+            background: var(--accent-warm);
+            color: #fff;
+        }
+
+        /* ── PROBLEM CARDS ── */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1px;
+            background: var(--rule);
+            border: 1px solid var(--rule);
+            margin: 2rem 0;
+        }
+
+        .problem-card {
+            background: var(--card-bg);
+            padding: 1.4rem 1.5rem;
+        }
+
+        .problem-card-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--accent-warm);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-card h4 {
+            font-size: 0.88rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .problem-card p {
+            font-size: 0.82rem;
+            color: var(--ink-muted);
+            line-height: 1.6;
+        }
+
+        /* ── IMAGE SLOTS ── */
+        .img-row {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .img-row.two {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .img-row.one {
+            grid-template-columns: 1fr;
+        }
+
+        .img-slot {
+            background: var(--tag-bg);
+            border: 1.5px dashed var(--rule);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 2.5rem 1rem;
+            min-height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .img-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+        }
+
+        .img-slot-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .img-slot-icon {
+            width: 28px;
+            height: 28px;
+            opacity: 0.3;
+        }
+
+        .img-caption {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--ink-muted);
+            letter-spacing: 0.06em;
+            margin-top: 0.5rem;
+        }
+
+        /* ── GOALS LIST ── */
+        .goals-list {
+            list-style: none;
+            margin: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border: 1px solid var(--rule);
+        }
+
+        .goals-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--rule);
+            font-size: 0.92rem;
+        }
+
+        .goals-list li:last-child {
+            border-bottom: none;
+        }
+
+        .goals-list li::before {
+            content: attr(data-n);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--accent);
+            min-width: 1.4rem;
+            padding-top: 0.12rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── TESTING NOTES ── */
+        .tester-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1px;
+            background: var(--rule);
+            border: 1px solid var(--rule);
+            margin: 1.5rem 0;
+        }
+
+        .tester-card {
+            background: var(--card-bg);
+            padding: 1.2rem 1.3rem;
+        }
+
+        .tester-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .tester-findings {
+            font-size: 0.8rem;
+            color: var(--ink-muted);
+            line-height: 1.6;
+        }
+
+        /* ── REVISION TABLE ── */
+        .revision-list {
+            list-style: none;
+            margin: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .revision-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            background: var(--card-bg);
+            border-left: 3px solid var(--accent);
+        }
+
+        .revision-item.removed {
+            border-left-color: var(--accent-warm);
+        }
+
+        .revision-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border-radius: 2px;
+            background: var(--accent);
+            color: #fff;
+            white-space: nowrap;
+            height: fit-content;
+        }
+
+        .revision-badge.removed {
+            background: var(--accent-warm);
+        }
+
+        .revision-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .revision-text strong {
+            font-weight: 500;
+        }
+
+        /* ── PROTOTYPE FLOWS ── */
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .flow-card {
+            padding: 1.2rem 1.3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--rule);
+        }
+
+        .flow-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.6rem;
+        }
+
+        .flow-steps {
+            font-size: 0.82rem;
+            color: var(--ink-muted);
+            line-height: 1.7;
+        }
+
+        .flow-arrow {
+            color: var(--accent-warm);
+        }
+
+        /* ── OUTCOMES TABLE ── */
+        .outcomes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.86rem;
+        }
+
+        .outcomes-table th {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--ink);
+        }
+
+        .outcomes-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--rule);
+            vertical-align: top;
+        }
+
+        .outcomes-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 0.4rem;
+            vertical-align: middle;
+        }
+
+        .dot-resolved {
+            background: #2e7d45;
+        }
+
+        .dot-partial {
+            background: #b58400;
+        }
+
+        /* ── FINAL PROTOTYPE SECTION ── */
+        .prototype-link-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.3rem 1.5rem;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            margin: 1.5rem 0;
+            transition: background 0.2s;
+        }
+
+        .prototype-link-box:hover {
+            background: #162f6a;
+        }
+
+        .prototype-link-box span {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .prototype-link-arrow {
+            font-size: 1.2rem;
+        }
+
+        /* ── REFLECTIONS ── */
+        .quote-block {
+            border-left: 3px solid var(--accent-warm);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--card-bg);
+        }
+
+        .quote-block p {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--ink);
+        }
+
+        .quote-source {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.62rem;
+            color: var(--ink-muted);
+            margin-top: 0.6rem;
+            letter-spacing: 0.08em;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        /* ── SCROLL PROGRESS ── */
+        #progress-bar {
+            position: fixed;
+            top: 52px;
+            left: 0;
+            height: 2px;
+            background: var(--accent-warm);
+            width: 0%;
+            z-index: 99;
+            transition: width 0.1s linear;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            .img-row.two {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar-nav {
+                display: none;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem 2.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .outcomes-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .prototype-link-box {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* ── FADE IN ON SCROLL ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
+
 <body>
 
-<div id="progress-bar"></div>
+    <div id="progress-bar"></div>
 
-<!-- TOP BAR -->
-<header class="topbar">
-  <span class="topbar-label">UX Case Study — Group 15</span>
-  <nav>
-    <ul class="topbar-nav">
-      <li><a href="#problem">Problem</a></li>
-      <li><a href="#process">Process</a></li>
-      <li><a href="#testing">Testing</a></li>
-      <li><a href="#prototype">Prototype</a></li>
-      <li><a href="#outcomes">Outcomes</a></li>
-    </ul>
-  </nav>
-</header>
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <span class="topbar-label">UX Case Study — Group 15</span>
+        <nav>
+            <ul class="topbar-nav">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#testing">Testing</a></li>
+                <li><a href="#prototype">Prototype</a></li>
+                <li><a href="#outcomes">Outcomes</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-eyebrow">UX / UI Redesign &nbsp;·&nbsp; ITIS 3310 Portfolio</div>
-  <h1>Rethinking the <em>Berkeley EECS</em> Website</h1>
-  <div class="hero-meta">
-    <div class="hero-meta-item">
-      <span class="meta-label">Team</span>
-      <span class="meta-value">Group 15</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="meta-label">Members</span>
-      <span class="meta-value">Brian Tamuel, Paydreanne Hinton, James Pulliam, Lakshna Dhanaraj</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="meta-label">Target Site</span>
-      <span class="meta-value">eecs.berkeley.edu</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="meta-label">Scope</span>
-      <span class="meta-value">9 Assignments → Full Hi-Fi Prototype</span>
-    </div>
-  </div>
-  <p class="hero-intro">
-    The UC Berkeley EECS website is a real academic department homepage — but it had some pretty serious usability problems that were making life harder for students and visitors than it needed to be. Here's the full story of how we found those issues, designed solutions, tested them, and shipped a working prototype.
-  </p>
-</div>
-
-<!-- SECTION 1: PROBLEM -->
-<section id="problem">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-num">01</span>
-      <h2 class="section-title">The Problem</h2>
-    </div>
-
-    <p class="prose fade-in">
-      When we first started evaluating candidate websites for this project, we were looking for sites that had real, diagnosable usability problems — not just ones that looked a little dated. Berkeley EECS jumped out immediately. It's used by students, prospective applicants, researchers, and faculty on a daily basis, which made the usability issues we found that much more impactful.
-    </p>
-
-    <p class="prose fade-in" style="margin-top:1rem;">
-      Our heuristic evaluation (Assignment 2) surfaced five distinct violations of Nielsen's usability heuristics. The core experience problem: <strong>users couldn't reliably navigate the site or understand what was happening after they interacted with it.</strong> Navigation was inconsistent, menus were cluttered with jargon, and clicking a link would just throw you at a blank white screen — no loading indicator, nothing.
-    </p>
-
-    <div class="tag-list fade-in">
-      <span class="tag warm">Visibility of System Status</span>
-      <span class="tag warm">User Control & Freedom</span>
-      <span class="tag warm">Match with Real World</span>
-      <span class="tag warm">Aesthetic & Minimalist Design</span>
-      <span class="tag warm">Consistency & Standards</span>
-    </div>
-
-    <div class="problem-grid fade-in">
-      <div class="problem-card">
-        <div class="problem-card-num">Heuristic #1</div>
-        <h4>No feedback on navigation</h4>
-        <p>Button clicks produced a blank white screen with zero loading indicator. Users had no way to know their click was registered or where they were going.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-card-num">Heuristic #2</div>
-        <h4>Acronym overload</h4>
-        <p>Navigation used terms like BEARS, ASE, and NSI with no explanation. New users were just left guessing — not a great welcome mat for incoming students.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-card-num">Heuristic #3</div>
-        <h4>Dropdown menus with no escape</h4>
-        <p>Clicking a nav item opened a dropdown with no close button. Scrolling didn't close it. Users had to discover that clicking elsewhere was the only way out.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-card-num">Heuristic #4</div>
-        <h4>Inconsistent menu behavior</h4>
-        <p>Some menus opened dropdowns, some navigated directly, some stayed open, some closed. You'd basically have to relearn how navigation worked every time.</p>
-      </div>
-      <div class="problem-card">
-        <div class="problem-card-num">Heuristic #8</div>
-        <h4>Cluttered, non-minimalist layout</h4>
-        <p>The footer had redundant links (e.g. "For Students," "For Grads," and "For Undergrads" all listed separately). The homepage crammed too much into too little space.</p>
-      </div>
-    </div>
-
-    <div class="img-row two fade-in">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label" style="background:url('https://drive.google.com/file/d/1qcvtUwOrOAQPQOyjBExbdlUeA0OjBj1Z/view?usp=sharing'); background-size: 100%;">Insert: Berkeley EECS original homepage screenshot</span>
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-eyebrow">UX / UI Redesign &nbsp;·&nbsp; ITIS 3310 Portfolio</div>
+        <h1>Rethinking the <em>Berkeley EECS</em> Website</h1>
+        <div class="hero-meta">
+            <div class="hero-meta-item">
+                <span class="meta-label">Team</span>
+                <span class="meta-value">Group 15</span>
+            </div>
+            <div class="hero-meta-item">
+                <span class="meta-label">Members</span>
+                <span class="meta-value">Brian Tamuel, Paydreanne Hinton, James Pulliam, Lakshna Dhanaraj</span>
+            </div>
+            <div class="hero-meta-item">
+                <span class="meta-label">Target Site</span>
+                <span class="meta-value">eecs.berkeley.edu</span>
+            </div>
+            <div class="hero-meta-item">
+                <span class="meta-label">Scope</span>
+                <span class="meta-value">9 Assignments → Full Hi-Fi Prototype</span>
+            </div>
         </div>
-        <p class="img-caption">Fig. 1 — Original eecs.berkeley.edu homepage</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Annotated heuristic violations screenshot</span>
-        </div>
-        <p class="img-caption">Fig. 2 — Heuristic violations annotated (Assign. 2)</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 2: PROCESS -->
-<section id="process">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-num">02</span>
-      <h2 class="section-title">The Design Process</h2>
+        <p class="hero-intro">
+            The UC Berkeley EECS website is a real academic department homepage — but it had some pretty serious usability problems that were making life harder for students and visitors than it needed to be. Here's the full story of how we found those issues, designed solutions, tested them, and shipped a working prototype.
+        </p>
     </div>
 
-    <p class="prose fade-in">
-      We approached this in deliberate stages — critique first, then concept, then progressively higher-fidelity designs. The five goals we set going into redesign (Assignment 3) drove almost every decision that came after.
-    </p>
+    <!-- SECTION 1: PROBLEM -->
+    <section id="problem">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-num">01</span>
+                <h2 class="section-title">The Problem</h2>
+            </div>
 
-    <ul class="goals-list fade-in">
-      <li data-n="G1">Lower cognitive overload by adding whitespace and reducing immediately visible options in the "What's Happening" and "Upcoming Events" sections.</li>
-      <li data-n="G2">Improve readability by replacing unexplained acronyms (BEARS, ASE, NSI) with their full program names.</li>
-      <li data-n="G3">Make dropdown menus easier by showing fewer links and adding a clear close mechanism.</li>
-      <li data-n="G4">Add a loading screen that tells users where they're being taken and confirms their click registered.</li>
-      <li data-n="G5">Slim down the footer by combining redundant links — no more "For Students / For Grads / For Undergrads" listed three separate times.</li>
-    </ul>
+            <p class="prose fade-in">
+                When we first started evaluating candidate websites for this project, we were looking for sites that had real, diagnosable usability problems — not just ones that looked a little dated. Berkeley EECS jumped out immediately. It's used by students, prospective applicants, researchers, and faculty on a daily basis, which made the usability issues we found that much more impactful.
+            </p>
 
-    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Low-Fidelity Sketches</h3>
-    <p class="prose fade-in">
-      We started with paper sketches (Assignment 3) to work through layout ideas without getting bogged down in tools. The big structural ideas that came out of this phase were: a full-width banner image replacing the awkward split layout, a horizontal card format for "Latest News" (replacing the cramped square thumbnails), and collapsible footer sections to kill the link clutter.
-    </p>
+            <p class="prose fade-in" style="margin-top:1rem;">
+                Our heuristic evaluation (Assignment 2) surfaced five distinct violations of Nielsen's usability heuristics. The core experience problem: <strong>users couldn't reliably navigate the site or understand what was happening after they interacted with it.</strong> Navigation was inconsistent, menus were cluttered with jargon, and clicking a link would just throw you at a blank white screen — no loading indicator, nothing.
+            </p>
 
-    <div class="img-row two fade-in">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          <span class="img-slot-label">Insert: Low-fidelity dropdown menu sketch</span>
+            <div class="tag-list fade-in">
+                <span class="tag warm">Visibility of System Status</span>
+                <span class="tag warm">User Control & Freedom</span>
+                <span class="tag warm">Match with Real World</span>
+                <span class="tag warm">Aesthetic & Minimalist Design</span>
+                <span class="tag warm">Consistency & Standards</span>
+            </div>
+
+            <div class="problem-grid fade-in">
+                <div class="problem-card">
+                    <div class="problem-card-num">Heuristic #1</div>
+                    <h4>No feedback on navigation</h4>
+                    <p>Button clicks produced a blank white screen with zero loading indicator. Users had no way to know their click was registered or where they were going.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-num">Heuristic #2</div>
+                    <h4>Acronym overload</h4>
+                    <p>Navigation used terms like BEARS, ASE, and NSI with no explanation. New users were just left guessing — not a great welcome mat for incoming students.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-num">Heuristic #3</div>
+                    <h4>Dropdown menus with no escape</h4>
+                    <p>Clicking a nav item opened a dropdown with no close button. Scrolling didn't close it. Users had to discover that clicking elsewhere was the only way out.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-num">Heuristic #4</div>
+                    <h4>Inconsistent menu behavior</h4>
+                    <p>Some menus opened dropdowns, some navigated directly, some stayed open, some closed. You'd basically have to relearn how navigation worked every time.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-card-num">Heuristic #8</div>
+                    <h4>Cluttered, non-minimalist layout</h4>
+                    <p>The footer had redundant links (e.g. "For Students," "For Grads," and "For Undergrads" all listed separately). The homepage crammed too much into too little space.</p>
+                </div>
+            </div>
+
+            <div class="img-row two fade-in">
+                <div>
+                    <div class="img-slot" style="background: url('https://lh3.google.com/u/1/d/1CaULLLdt-UTWI8_8KnzdNVwzuOQZq-fG=w3440-h1998-iv1?auditContext=forDisplay') no-repeat; background-size: 100%;">
+                        
+                        <!--<span class="img-slot-label"></span>-->
+                    </div>
+                    <p class="img-caption">Fig. 1 — Original eecs.berkeley.edu homepage</p>
+                </div>
+                <div>
+                    <div class="img-slot" style="background: url('https://lh3.google.com/u/1/d/1K39MJ5KI06pjqCXxmmTdDplFgC-5NSCT=w3440-h1998-iv1?auditContext=prefetch') no-repeat; background-size: cover;">
+                        <!--<span class="img-slot-label">Insert: Annotated heuristic violations screenshot</span>-->
+                    </div>
+                    <p class="img-caption">Fig. 2 — Heuristic violations annotated (Assign. 2)</p>
+                </div>
+            </div>
         </div>
-        <p class="img-caption">Fig. 3 — Dropdown menu + footer sketches (Assign. 3)</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          <span class="img-slot-label">Insert: Low-fidelity homepage sketch (desktop)</span>
+    </section>
+
+    <!-- SECTION 2: PROCESS -->
+    <section id="process">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-num">02</span>
+                <h2 class="section-title">The Design Process</h2>
+            </div>
+
+            <p class="prose fade-in">
+                We approached this in deliberate stages — critique first, then concept, then progressively higher-fidelity designs. The five goals we set going into redesign (Assignment 3) drove almost every decision that came after.
+            </p>
+
+            <ul class="goals-list fade-in">
+                <li data-n="G1">Lower cognitive overload by adding whitespace and reducing immediately visible options in the "What's Happening" and "Upcoming Events" sections.</li>
+                <li data-n="G2">Improve readability by replacing unexplained acronyms (BEARS, ASE, NSI) with their full program names.</li>
+                <li data-n="G3">Make dropdown menus easier by showing fewer links and adding a clear close mechanism.</li>
+                <li data-n="G4">Add a loading screen that tells users where they're being taken and confirms their click registered.</li>
+                <li data-n="G5">Slim down the footer by combining redundant links — no more "For Students / For Grads / For Undergrads" listed three separate times.</li>
+            </ul>
+
+            <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Low-Fidelity Sketches</h3>
+            <p class="prose fade-in">
+                We started with paper sketches (Assignment 3) to work through layout ideas without getting bogged down in tools. The big structural ideas that came out of this phase were: a full-width banner image replacing the awkward split layout, a horizontal card format for "Latest News" (replacing the cramped square thumbnails), and collapsible footer sections to kill the link clutter.
+            </p>
+
+            <div class="img-row two fade-in">
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Low-fidelity dropdown menu sketch</span>
+                    </div>
+                    <p class="img-caption">Fig. 3 — Dropdown menu + footer sketches (Assign. 3)</p>
+                </div>
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Low-fidelity homepage sketch (desktop)</span>
+                    </div>
+                    <p class="img-caption">Fig. 4 — Homepage sketch, desktop + mobile (Assign. 3)</p>
+                </div>
+            </div>
+
+            <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Wireframes</h3>
+            <p class="prose fade-in">
+                The Figma wireframes (Assignment 5) translated the sketches into something testable. Key additions at this stage included a search results page (which didn't exist on the original site at all), a proper loading screen, and a dark mode variant. The wireframes were built out for both desktop and mobile, with the mobile version using a single-column layout and a condensed footer.
+            </p>
+            <p class="prose fade-in" style="margin-top:1rem;">
+                One intentional decision here: renaming "What's Happening" to "Latest News." Peer testing later confirmed this was the right call — users were constantly confusing the two sections.
+            </p>
+
+            <div class="img-row two fade-in">
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Desktop wireframe — homepage (Assign. 5)</span>
+                    </div>
+                    <p class="img-caption">Fig. 5 — Desktop wireframe, homepage (Assign. 5)</p>
+                </div>
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Mobile wireframe — homepage (Assign. 5)</span>
+                    </div>
+                    <p class="img-caption">Fig. 6 — Mobile wireframe, homepage (Assign. 5)</p>
+                </div>
+            </div>
+
+            <div class="img-row two fade-in">
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Loading screen wireframe (Assign. 5)</span>
+                    </div>
+                    <p class="img-caption">Fig. 7 — Loading screen wireframe (Assign. 5)</p>
+                </div>
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Search results page wireframe (Assign. 5)</span>
+                    </div>
+                    <p class="img-caption">Fig. 8 — Search results page (new addition) (Assign. 5)</p>
+                </div>
+            </div>
         </div>
-        <p class="img-caption">Fig. 4 — Homepage sketch, desktop + mobile (Assign. 3)</p>
-      </div>
-    </div>
+    </section>
 
-    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Wireframes</h3>
-    <p class="prose fade-in">
-      The Figma wireframes (Assignment 5) translated the sketches into something testable. Key additions at this stage included a search results page (which didn't exist on the original site at all), a proper loading screen, and a dark mode variant. The wireframes were built out for both desktop and mobile, with the mobile version using a single-column layout and a condensed footer.
-    </p>
-    <p class="prose fade-in" style="margin-top:1rem;">
-      One intentional decision here: renaming "What's Happening" to "Latest News." Peer testing later confirmed this was the right call — users were constantly confusing the two sections.
-    </p>
+    <!-- SECTION 3: TESTING -->
+    <section id="testing">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-num">03</span>
+                <h2 class="section-title">Testing & Iterations</h2>
+            </div>
 
-    <div class="img-row two fade-in">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Desktop wireframe — homepage (Assign. 5)</span>
+            <p class="prose fade-in">
+                We ran two rounds of usability testing — one on the low-fidelity prototype (Assignment 4) and one on the wireframes (Assignment 6). Both rounds involved think-aloud sessions where testers completed tasks without any guidance from us.
+            </p>
+
+            <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Round 1 — Low-Fidelity Testing (Assign. 4)</h3>
+            <p class="prose fade-in">
+                The early peer testing results were honestly a bit humbling. None of our testers figured out the site was an academic department homepage — everyone assumed it was some kind of events or news website. That was a pretty clear signal that the design needed a stronger identity signal up front.
+            </p>
+
+            <div class="quote-block fade-in">
+                <p>"Looks like some kind of event website, maybe like a scheduling thing... It could be news or it could be events?"</p>
+                <div class="quote-source">— Participant, Round 1 think-aloud</div>
+            </div>
+
+            <p class="prose fade-in">Other key findings from Round 1:</p>
+            <ul class="goals-list fade-in">
+                <li data-n="↓">Card interactivity was unclear — users couldn't tell what was clickable in the Latest News section.</li>
+                <li data-n="↓">Horizontal scrolling for events on mobile was not intuitive at all; users expected vertical scrolling.</li>
+                <li data-n="↓">Square thumbnails read as static, not interactive. Rectangular cards tested significantly better.</li>
+            </ul>
+
+            <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Round 2 — Wireframe Testing (Assign. 6)</h3>
+            <p class="prose fade-in">
+                Four testers (Dylan, Tirsha, Ryin, Hanson) ran through three tasks on the Figma wireframes: searching for a news article, RSVPing for an event, and toggling dark mode.
+            </p>
+
+            <div class="tester-grid fade-in">
+                <div class="tester-card">
+                    <div class="tester-name">Dylan</div>
+                    <div class="tester-findings">Completed all tasks with 0 misclicks. The gray border on the Latest News section gave clear visual separation. Noted dark mode was in different spots on desktop vs. mobile — slightly confusing.</div>
+                </div>
+                <div class="tester-card">
+                    <div class="tester-name">Tirsha</div>
+                    <div class="tester-findings">Missed the RSVP button on mobile; wanted it on the right side. Suggested the moon icon become an explicit toggle, not just an icon. Recommended a font size bump for accessibility.</div>
+                </div>
+                <div class="tester-card">
+                    <div class="tester-name">Ryin</div>
+                    <div class="tester-findings">Completed tasks quickly. The one issue: the search bar didn't navigate to the search results wireframe — a prototype wiring issue, not a design flaw. Wanted inverted colors on the sun/moon toggle state.</div>
+                </div>
+                <div class="tester-card">
+                    <div class="tester-name">Hanson</div>
+                    <div class="tester-findings">Tried clicking the event card square directly on mobile instead of the RSVP button. On desktop, the "RSVP / Details" label confused him — he looked for two separate buttons expecting booking and details to be distinct.</div>
+                </div>
+            </div>
+
+            <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Design Changes Made After Testing</h3>
+
+            <ul class="revision-list fade-in">
+                <li class="revision-item">
+                    <span class="revision-badge">Fixed</span>
+                    <div class="revision-text"><strong>Dark mode toggle moved into the hamburger menu on mobile.</strong> Having it in two different spots depending on device was quietly confusing users — consolidating it removed that inconsistency.</div>
+                </li>
+                <li class="revision-item removed">
+                    <span class="revision-badge removed">Removed</span>
+                    <div class="revision-text"><strong>RSVP button removed from mobile event cards.</strong> Testers kept tapping the thumbnail instead of the button. Made the whole card tappable — going with what users were already naturally trying to do.</div>
+                </li>
+                <li class="revision-item">
+                    <span class="revision-badge">Fixed</span>
+                    <div class="revision-text"><strong>Button label simplified from "RSVP / Details" to just "RSVP".</strong> Users got confused expecting two separate buttons. Singular purpose, singular label — much less friction.</div>
+                </li>
+                <li class="revision-item">
+                    <span class="revision-badge">Added</span>
+                    <div class="revision-text"><strong>Clearer branding in the header</strong> (department name made more prominent) to immediately communicate this is an academic department site, not a news or events platform.</div>
+                </li>
+            </ul>
+
+            <div class="img-row two fade-in">
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Revised wireframe — mobile hamburger menu with dark mode toggle</span>
+                    </div>
+                    <p class="img-caption">Fig. 9 — Revised mobile hamburger menu (Assign. 6)</p>
+                </div>
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Revised wireframe — desktop dark mode</span>
+                    </div>
+                    <p class="img-caption">Fig. 10 — Revised dark mode desktop wireframe (Assign. 6)</p>
+                </div>
+            </div>
         </div>
-        <p class="img-caption">Fig. 5 — Desktop wireframe, homepage (Assign. 5)</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Mobile wireframe — homepage (Assign. 5)</span>
+    </section>
+
+    <!-- SECTION 4: PROTOTYPE -->
+    <section id="prototype">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-num">04</span>
+                <h2 class="section-title">The Final Prototype</h2>
+            </div>
+
+            <p class="prose fade-in">
+                Assignment 7 brought everything together into a fully interactive high-fidelity prototype in Figma, covering desktop and mobile (iPhone 16 & 17 Pro Max). Every interactive element has hover/click states — the RSVP button, news cards, dark mode toggle, dropdown menus.
+            </p>
+
+            <a class="prototype-link-box fade-in" href="https://www.figma.com/design/INr9m1OpHvuZCIVKI4eIfT/Assignment-5---7?node-id=160-2" target="_blank" rel="noopener">
+                <span>View Figma Prototype — Assignment 7</span>
+                <span class="prototype-link-arrow">↗</span>
+            </a>
+
+            <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Core User Flows</h3>
+
+            <div class="flow-grid fade-in">
+                <div class="flow-card">
+                    <div class="flow-title">Flow 1 — Search</div>
+                    <div class="flow-steps">
+                        Home <span class="flow-arrow">→</span> Search overlay <span class="flow-arrow">→</span> Loading screen <span class="flow-arrow">→</span> Search results page
+                    </div>
+                </div>
+                <div class="flow-card">
+                    <div class="flow-title">Flow 2 — RSVP</div>
+                    <div class="flow-steps">
+                        Home <span class="flow-arrow">→</span> RSVP button <span class="flow-arrow">→</span> Loading screen <span class="flow-arrow">→</span> RSVP form <span class="flow-arrow">→</span> Error state <span class="flow-arrow">→</span> Corrected form <span class="flow-arrow">→</span> Confirmation
+                    </div>
+                </div>
+                <div class="flow-card">
+                    <div class="flow-title">Flow 3 — Dark Mode</div>
+                    <div class="flow-steps">
+                        Any page <span class="flow-arrow">→</span> Toggle ☀/☾ <span class="flow-arrow">→</span> Interface updates <span class="flow-arrow">→</span> Toggle again <span class="flow-arrow">→</span> Light mode restored
+                    </div>
+                </div>
+            </div>
+
+            <div class="img-row two fade-in">
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Hi-fi prototype — desktop homepage (light)</span>
+                    </div>
+                    <p class="img-caption">Fig. 11 — Hi-fi prototype desktop, light mode (Assign. 7)</p>
+                </div>
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Hi-fi prototype — desktop homepage (dark)</span>
+                    </div>
+                    <p class="img-caption">Fig. 12 — Hi-fi prototype desktop, dark mode (Assign. 7)</p>
+                </div>
+            </div>
+
+            <div class="img-row two fade-in">
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Hi-fi prototype — mobile homepage</span>
+                    </div>
+                    <p class="img-caption">Fig. 13 — Hi-fi prototype mobile homepage (Assign. 7)</p>
+                </div>
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Hi-fi prototype — RSVP flow / loading screen</span>
+                    </div>
+                    <p class="img-caption">Fig. 14 — RSVP flow with loading screen (Assign. 7)</p>
+                </div>
+            </div>
         </div>
-        <p class="img-caption">Fig. 6 — Mobile wireframe, homepage (Assign. 5)</p>
-      </div>
-    </div>
+    </section>
 
-    <div class="img-row two fade-in">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Loading screen wireframe (Assign. 5)</span>
+    <!-- SECTION 5: OUTCOMES -->
+    <section id="outcomes">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-num">05</span>
+                <h2 class="section-title">Final Testing & Outcomes</h2>
+            </div>
+
+            <p class="prose fade-in">
+                Assignment 8 was our final round of user testing — three participants (Jason, Rico, Nat) used the high-fidelity prototype to complete the same core tasks. Overall, the results were much cleaner than earlier rounds, which was a good sign that the iterations actually worked.
+            </p>
+
+            <table class="outcomes-table fade-in">
+                <thead>
+                    <tr>
+                        <th>Issue (original)</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No loading feedback on navigation</td>
+                        <td><span class="status-dot dot-resolved"></span>Resolved</td>
+                        <td>Loading screen with animated dots + destination label well-received by all three testers. Zero confusion.</td>
+                    </tr>
+                    <tr>
+                        <td>Unexplained acronyms in nav</td>
+                        <td><span class="status-dot dot-resolved"></span>Resolved</td>
+                        <td>Full program names throughout. No tester flagged this as a problem in Round 3.</td>
+                    </tr>
+                    <tr>
+                        <td>Dropdown menus with no close mechanism</td>
+                        <td><span class="status-dot dot-resolved"></span>Resolved</td>
+                        <td>Redesigned dropdown pushes content down instead of overlapping it; arrow indicator flips on click to signal state.</td>
+                    </tr>
+                    <tr>
+                        <td>Cluttered footer with redundant links</td>
+                        <td><span class="status-dot dot-resolved"></span>Resolved</td>
+                        <td>Footer consolidated; "For Students / Grads / Undergrads" merged into "Resources for Students."</td>
+                    </tr>
+                    <tr>
+                        <td>Only one path to RSVP for events</td>
+                        <td><span class="status-dot dot-partial"></span>Partial</td>
+                        <td>Jason (P1) still initially navigated to Academics looking for the RSVP. Prototype scope limited how many paths we could wire up. This is a known improvement area.</td>
+                    </tr>
+                    <tr>
+                        <td>RSVP form missing submit button</td>
+                        <td><span class="status-dot dot-partial"></span>Partial</td>
+                        <td>Caught by Nat (P3) during hi-fi testing — the submit button was omitted from the prototype. Documented for resolution.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="quote-block fade-in">
+                <p>"The design feels clean and easy to navigate. Nothing was hard to find."</p>
+                <div class="quote-source">— Nat (P3), Assignment 8 testing</div>
+            </div>
+
+            <p class="prose fade-in" style="margin-top:2rem;">
+                The dark mode toggle worked particularly well across all testers — everyone found it immediately without being told where to look. The loading screen was another success: where the original site had given users a blank white screen and no feedback, testers in Round 3 navigated confidently with no confusion about where their clicks were taking them.
+            </p>
+
+            <p class="prose fade-in" style="margin-top:1rem;">
+                The two remaining issues (RSVP discoverability and the missing submit button) are genuinely fixable — they're prototype completeness issues more than design problems. If this were a live build, both would be quick wins.
+            </p>
+
+            <div class="img-row two fade-in" style="margin-top:2rem;">
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: Before — original EECS homepage</span>
+                    </div>
+                    <p class="img-caption">Before — original eecs.berkeley.edu</p>
+                </div>
+                <div>
+                    <div class="img-slot">
+                        <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="img-slot-label">Insert: After — hi-fi redesign homepage</span>
+                    </div>
+                    <p class="img-caption">After — hi-fi prototype redesign (Assign. 7)</p>
+                </div>
+            </div>
+
+            <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2.5rem 0 1rem; font-weight:400;">What We Actually Learned</h3>
+
+            <p class="prose fade-in">
+                Probably the most useful thing from this whole process: usability testing consistently surfaced problems we genuinely didn't see ourselves. We went into wireframe testing expecting the dark mode toggle to be the confusing part — it wasn't. The RSVP button on mobile was way more of a problem than we anticipated. That kind of disconnect between designer expectations and user behavior is exactly why you test, and exactly why testing on real people (not just your group members) matters.
+            </p>
+            <p class="prose fade-in" style="margin-top:1rem;">
+                The iterative loop — design, test, find problems, fix, repeat — also made each round of revisions feel grounded in actual evidence rather than just group opinion. When we changed the RSVP button behavior on mobile, it wasn't a guess. We'd watched four people independently try to tap the card instead of the button.
+            </p>
         </div>
-        <p class="img-caption">Fig. 7 — Loading screen wireframe (Assign. 5)</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Search results page wireframe (Assign. 5)</span>
-        </div>
-        <p class="img-caption">Fig. 8 — Search results page (new addition) (Assign. 5)</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- SECTION 3: TESTING -->
-<section id="testing">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-num">03</span>
-      <h2 class="section-title">Testing & Iterations</h2>
-    </div>
+    <!-- FOOTER -->
+    <footer>
+        <div>Group 15 · Brian Tamuel · Paydreanne Hinton · James Pulliam · Lakshna Dhanaraj</div>
+        <div style="margin-top:0.4rem; opacity:0.6;">ITIS 3310 · UX/UI Design · Portfolio Case Study</div>
+    </footer>
 
-    <p class="prose fade-in">
-      We ran two rounds of usability testing — one on the low-fidelity prototype (Assignment 4) and one on the wireframes (Assignment 6). Both rounds involved think-aloud sessions where testers completed tasks without any guidance from us.
-    </p>
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            document.getElementById('progress-bar').style.width = (scrolled / total * 100) + '%';
+        });
 
-    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Round 1 — Low-Fidelity Testing (Assign. 4)</h3>
-    <p class="prose fade-in">
-      The early peer testing results were honestly a bit humbling. None of our testers figured out the site was an academic department homepage — everyone assumed it was some kind of events or news website. That was a pretty clear signal that the design needed a stronger identity signal up front.
-    </p>
+        // Fade in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
 
-    <div class="quote-block fade-in">
-      <p>"Looks like some kind of event website, maybe like a scheduling thing... It could be news or it could be events?"</p>
-      <div class="quote-source">— Participant, Round 1 think-aloud</div>
-    </div>
-
-    <p class="prose fade-in">Other key findings from Round 1:</p>
-    <ul class="goals-list fade-in">
-      <li data-n="↓">Card interactivity was unclear — users couldn't tell what was clickable in the Latest News section.</li>
-      <li data-n="↓">Horizontal scrolling for events on mobile was not intuitive at all; users expected vertical scrolling.</li>
-      <li data-n="↓">Square thumbnails read as static, not interactive. Rectangular cards tested significantly better.</li>
-    </ul>
-
-    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Round 2 — Wireframe Testing (Assign. 6)</h3>
-    <p class="prose fade-in">
-      Four testers (Dylan, Tirsha, Ryin, Hanson) ran through three tasks on the Figma wireframes: searching for a news article, RSVPing for an event, and toggling dark mode.
-    </p>
-
-    <div class="tester-grid fade-in">
-      <div class="tester-card">
-        <div class="tester-name">Dylan</div>
-        <div class="tester-findings">Completed all tasks with 0 misclicks. The gray border on the Latest News section gave clear visual separation. Noted dark mode was in different spots on desktop vs. mobile — slightly confusing.</div>
-      </div>
-      <div class="tester-card">
-        <div class="tester-name">Tirsha</div>
-        <div class="tester-findings">Missed the RSVP button on mobile; wanted it on the right side. Suggested the moon icon become an explicit toggle, not just an icon. Recommended a font size bump for accessibility.</div>
-      </div>
-      <div class="tester-card">
-        <div class="tester-name">Ryin</div>
-        <div class="tester-findings">Completed tasks quickly. The one issue: the search bar didn't navigate to the search results wireframe — a prototype wiring issue, not a design flaw. Wanted inverted colors on the sun/moon toggle state.</div>
-      </div>
-      <div class="tester-card">
-        <div class="tester-name">Hanson</div>
-        <div class="tester-findings">Tried clicking the event card square directly on mobile instead of the RSVP button. On desktop, the "RSVP / Details" label confused him — he looked for two separate buttons expecting booking and details to be distinct.</div>
-      </div>
-    </div>
-
-    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Design Changes Made After Testing</h3>
-
-    <ul class="revision-list fade-in">
-      <li class="revision-item">
-        <span class="revision-badge">Fixed</span>
-        <div class="revision-text"><strong>Dark mode toggle moved into the hamburger menu on mobile.</strong> Having it in two different spots depending on device was quietly confusing users — consolidating it removed that inconsistency.</div>
-      </li>
-      <li class="revision-item removed">
-        <span class="revision-badge removed">Removed</span>
-        <div class="revision-text"><strong>RSVP button removed from mobile event cards.</strong> Testers kept tapping the thumbnail instead of the button. Made the whole card tappable — going with what users were already naturally trying to do.</div>
-      </li>
-      <li class="revision-item">
-        <span class="revision-badge">Fixed</span>
-        <div class="revision-text"><strong>Button label simplified from "RSVP / Details" to just "RSVP".</strong> Users got confused expecting two separate buttons. Singular purpose, singular label — much less friction.</div>
-      </li>
-      <li class="revision-item">
-        <span class="revision-badge">Added</span>
-        <div class="revision-text"><strong>Clearer branding in the header</strong> (department name made more prominent) to immediately communicate this is an academic department site, not a news or events platform.</div>
-      </li>
-    </ul>
-
-    <div class="img-row two fade-in">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Revised wireframe — mobile hamburger menu with dark mode toggle</span>
-        </div>
-        <p class="img-caption">Fig. 9 — Revised mobile hamburger menu (Assign. 6)</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Revised wireframe — desktop dark mode</span>
-        </div>
-        <p class="img-caption">Fig. 10 — Revised dark mode desktop wireframe (Assign. 6)</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 4: PROTOTYPE -->
-<section id="prototype">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-num">04</span>
-      <h2 class="section-title">The Final Prototype</h2>
-    </div>
-
-    <p class="prose fade-in">
-      Assignment 7 brought everything together into a fully interactive high-fidelity prototype in Figma, covering desktop and mobile (iPhone 16 & 17 Pro Max). Every interactive element has hover/click states — the RSVP button, news cards, dark mode toggle, dropdown menus.
-    </p>
-
-    <a class="prototype-link-box fade-in" href="https://www.figma.com/design/INr9m1OpHvuZCIVKI4eIfT/Assignment-5---7?node-id=160-2" target="_blank" rel="noopener">
-      <span>View Figma Prototype — Assignment 7</span>
-      <span class="prototype-link-arrow">↗</span>
-    </a>
-
-    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2rem 0 1rem; font-weight:400;">Core User Flows</h3>
-
-    <div class="flow-grid fade-in">
-      <div class="flow-card">
-        <div class="flow-title">Flow 1 — Search</div>
-        <div class="flow-steps">
-          Home <span class="flow-arrow">→</span> Search overlay <span class="flow-arrow">→</span> Loading screen <span class="flow-arrow">→</span> Search results page
-        </div>
-      </div>
-      <div class="flow-card">
-        <div class="flow-title">Flow 2 — RSVP</div>
-        <div class="flow-steps">
-          Home <span class="flow-arrow">→</span> RSVP button <span class="flow-arrow">→</span> Loading screen <span class="flow-arrow">→</span> RSVP form <span class="flow-arrow">→</span> Error state <span class="flow-arrow">→</span> Corrected form <span class="flow-arrow">→</span> Confirmation
-        </div>
-      </div>
-      <div class="flow-card">
-        <div class="flow-title">Flow 3 — Dark Mode</div>
-        <div class="flow-steps">
-          Any page <span class="flow-arrow">→</span> Toggle ☀/☾ <span class="flow-arrow">→</span> Interface updates <span class="flow-arrow">→</span> Toggle again <span class="flow-arrow">→</span> Light mode restored
-        </div>
-      </div>
-    </div>
-
-    <div class="img-row two fade-in">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Hi-fi prototype — desktop homepage (light)</span>
-        </div>
-        <p class="img-caption">Fig. 11 — Hi-fi prototype desktop, light mode (Assign. 7)</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Hi-fi prototype — desktop homepage (dark)</span>
-        </div>
-        <p class="img-caption">Fig. 12 — Hi-fi prototype desktop, dark mode (Assign. 7)</p>
-      </div>
-    </div>
-
-    <div class="img-row two fade-in">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Hi-fi prototype — mobile homepage</span>
-        </div>
-        <p class="img-caption">Fig. 13 — Hi-fi prototype mobile homepage (Assign. 7)</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Hi-fi prototype — RSVP flow / loading screen</span>
-        </div>
-        <p class="img-caption">Fig. 14 — RSVP flow with loading screen (Assign. 7)</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 5: OUTCOMES -->
-<section id="outcomes">
-  <div class="container">
-    <div class="section-header fade-in">
-      <span class="section-num">05</span>
-      <h2 class="section-title">Final Testing & Outcomes</h2>
-    </div>
-
-    <p class="prose fade-in">
-      Assignment 8 was our final round of user testing — three participants (Jason, Rico, Nat) used the high-fidelity prototype to complete the same core tasks. Overall, the results were much cleaner than earlier rounds, which was a good sign that the iterations actually worked.
-    </p>
-
-    <table class="outcomes-table fade-in">
-      <thead>
-        <tr>
-          <th>Issue (original)</th>
-          <th>Status</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>No loading feedback on navigation</td>
-          <td><span class="status-dot dot-resolved"></span>Resolved</td>
-          <td>Loading screen with animated dots + destination label well-received by all three testers. Zero confusion.</td>
-        </tr>
-        <tr>
-          <td>Unexplained acronyms in nav</td>
-          <td><span class="status-dot dot-resolved"></span>Resolved</td>
-          <td>Full program names throughout. No tester flagged this as a problem in Round 3.</td>
-        </tr>
-        <tr>
-          <td>Dropdown menus with no close mechanism</td>
-          <td><span class="status-dot dot-resolved"></span>Resolved</td>
-          <td>Redesigned dropdown pushes content down instead of overlapping it; arrow indicator flips on click to signal state.</td>
-        </tr>
-        <tr>
-          <td>Cluttered footer with redundant links</td>
-          <td><span class="status-dot dot-resolved"></span>Resolved</td>
-          <td>Footer consolidated; "For Students / Grads / Undergrads" merged into "Resources for Students."</td>
-        </tr>
-        <tr>
-          <td>Only one path to RSVP for events</td>
-          <td><span class="status-dot dot-partial"></span>Partial</td>
-          <td>Jason (P1) still initially navigated to Academics looking for the RSVP. Prototype scope limited how many paths we could wire up. This is a known improvement area.</td>
-        </tr>
-        <tr>
-          <td>RSVP form missing submit button</td>
-          <td><span class="status-dot dot-partial"></span>Partial</td>
-          <td>Caught by Nat (P3) during hi-fi testing — the submit button was omitted from the prototype. Documented for resolution.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="quote-block fade-in">
-      <p>"The design feels clean and easy to navigate. Nothing was hard to find."</p>
-      <div class="quote-source">— Nat (P3), Assignment 8 testing</div>
-    </div>
-
-    <p class="prose fade-in" style="margin-top:2rem;">
-      The dark mode toggle worked particularly well across all testers — everyone found it immediately without being told where to look. The loading screen was another success: where the original site had given users a blank white screen and no feedback, testers in Round 3 navigated confidently with no confusion about where their clicks were taking them.
-    </p>
-
-    <p class="prose fade-in" style="margin-top:1rem;">
-      The two remaining issues (RSVP discoverability and the missing submit button) are genuinely fixable — they're prototype completeness issues more than design problems. If this were a live build, both would be quick wins.
-    </p>
-
-    <div class="img-row two fade-in" style="margin-top:2rem;">
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: Before — original EECS homepage</span>
-        </div>
-        <p class="img-caption">Before — original eecs.berkeley.edu</p>
-      </div>
-      <div>
-        <div class="img-slot">
-          <svg class="img-slot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          <span class="img-slot-label">Insert: After — hi-fi redesign homepage</span>
-        </div>
-        <p class="img-caption">After — hi-fi prototype redesign (Assign. 7)</p>
-      </div>
-    </div>
-
-    <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin: 2.5rem 0 1rem; font-weight:400;">What We Actually Learned</h3>
-
-    <p class="prose fade-in">
-      Probably the most useful thing from this whole process: usability testing consistently surfaced problems we genuinely didn't see ourselves. We went into wireframe testing expecting the dark mode toggle to be the confusing part — it wasn't. The RSVP button on mobile was way more of a problem than we anticipated. That kind of disconnect between designer expectations and user behavior is exactly why you test, and exactly why testing on real people (not just your group members) matters.
-    </p>
-    <p class="prose fade-in" style="margin-top:1rem;">
-      The iterative loop — design, test, find problems, fix, repeat — also made each round of revisions feel grounded in actual evidence rather than just group opinion. When we changed the RSVP button behavior on mobile, it wasn't a guess. We'd watched four people independently try to tap the card instead of the button.
-    </p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div>Group 15 · Brian Tamuel · Paydreanne Hinton · James Pulliam · Lakshna Dhanaraj</div>
-  <div style="margin-top:0.4rem; opacity:0.6;">ITIS 3310 · UX/UI Design · Portfolio Case Study</div>
-</footer>
-
-<script>
-  // Progress bar
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    document.getElementById('progress-bar').style.width = (scrolled / total * 100) + '%';
-  });
-
-  // Fade in on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-</script>
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
 </body>
+
 </html>
